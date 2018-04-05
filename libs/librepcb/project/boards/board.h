@@ -58,6 +58,7 @@ class BI_NetSegment;
 class BI_NetPoint;
 class BI_NetLine;
 class BI_Polygon;
+class BI_StrokeText;
 class BI_Plane;
 class BoardLayerStack;
 class BoardUserSettings;
@@ -134,6 +135,7 @@ class Board final : public QObject, public AttributeProvider,
         const Uuid& getUuid() const noexcept {return mUuid;}
         const QString& getName() const noexcept {return mName;}
         const QIcon& getIcon() const noexcept {return mIcon;}
+        const QString& getDefaultFontName() const noexcept {return mDefaultFontFileName;}
 
         // DeviceInstance Methods
         const QMap<Uuid, BI_Device*>& getDeviceInstances() const noexcept {return mDeviceInstances;}
@@ -157,6 +159,11 @@ class Board final : public QObject, public AttributeProvider,
         const QList<BI_Polygon*>& getPolygons() const noexcept {return mPolygons;}
         void addPolygon(BI_Polygon& polygon);
         void removePolygon(BI_Polygon& polygon);
+
+        // StrokeText Methods
+        const QList<BI_StrokeText*>& getStrokeTexts() const noexcept {return mStrokeTexts;}
+        void addStrokeText(BI_StrokeText& text);
+        void removeStrokeText(BI_StrokeText& text);
 
         // General Methods
         void addToProject();
@@ -223,12 +230,14 @@ class Board final : public QObject, public AttributeProvider,
         Uuid mUuid;
         QString mName;
         QIcon mIcon;
+        QString mDefaultFontFileName;
 
         // items
         QMap<Uuid, BI_Device*> mDeviceInstances;
         QList<BI_NetSegment*> mNetSegments;
         QList<BI_Plane*> mPlanes;
         QList<BI_Polygon*> mPolygons;
+        QList<BI_StrokeText*> mStrokeTexts;
 
         // ERC messages
         QHash<Uuid, ErcMsg*> mErcMsgListUnplacedComponentInstances;
