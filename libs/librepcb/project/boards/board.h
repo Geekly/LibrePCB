@@ -60,6 +60,7 @@ class BI_NetLine;
 class BI_Polygon;
 class BI_Plane;
 class BoardLayerStack;
+class BoardFabricationOutputSettings;
 class BoardUserSettings;
 class BoardSelectionQuery;
 
@@ -116,6 +117,8 @@ class Board final : public QObject, public AttributeProvider,
         BoardLayerStack& getLayerStack() noexcept {return *mLayerStack;}
         BoardDesignRules& getDesignRules() noexcept {return *mDesignRules;}
         const BoardDesignRules& getDesignRules() const noexcept {return *mDesignRules;}
+        BoardFabricationOutputSettings& getFabricationOutputSettings() noexcept {return *mFabricationOutputSettings;}
+        const BoardFabricationOutputSettings& getFabricationOutputSettings() const noexcept {return *mFabricationOutputSettings;}
         bool isEmpty() const noexcept;
         QList<BI_Base*> getItemsAtScenePos(const Point& pos) const noexcept;
         QList<BI_Via*> getViasAtScenePos(const Point& pos, const NetSignal* netsignal) const noexcept;
@@ -216,6 +219,7 @@ class Board final : public QObject, public AttributeProvider,
         QScopedPointer<BoardLayerStack> mLayerStack;
         QScopedPointer<GridProperties> mGridProperties;
         QScopedPointer<BoardDesignRules> mDesignRules;
+        QScopedPointer<BoardFabricationOutputSettings> mFabricationOutputSettings;
         QScopedPointer<BoardUserSettings> mUserSettings;
         QRectF mViewRect;
 

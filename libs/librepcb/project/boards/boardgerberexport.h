@@ -64,7 +64,7 @@ class BoardGerberExport final : public QObject
         // Constructors / Destructor
         BoardGerberExport() = delete;
         BoardGerberExport(const BoardGerberExport& other) = delete;
-        BoardGerberExport(const Board& board, const FilePath& outputDir) noexcept;
+        BoardGerberExport(const Board& board) noexcept;
         ~BoardGerberExport() noexcept;
 
         // General Methods
@@ -100,7 +100,6 @@ class BoardGerberExport final : public QObject
         // Private Member Variables
         const Project& mProject;
         const Board& mBoard;
-        FilePath mOutputDirectory;
 };
 
 /*****************************************************************************************

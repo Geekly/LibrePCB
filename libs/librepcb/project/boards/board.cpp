@@ -48,6 +48,7 @@
 #include <librepcb/library/cmp/component.h>
 #include "items/bi_polygon.h"
 #include "boardlayerstack.h"
+#include "boardfabricationoutputsettings.h"
 #include "boardusersettings.h"
 #include "boardselectionquery.h"
 #include "../circuit/netsignal.h"
@@ -85,6 +86,10 @@ Board::Board(const Board& other, const FilePath& filepath, const QString& name) 
 
         // copy design rules
         mDesignRules.reset(new BoardDesignRules(*other.mDesignRules));
+
+        // copy fabrication output settings
+        mFabricationOutputSettings.reset(new BoardFabricationOutputSettings(
+                                             *this, *other.mFabricationOutputSettings));
 
         // copy user settings
         mUserSettings.reset(new BoardUserSettings(*this, *other.mUserSettings));
@@ -138,6 +143,7 @@ Board::Board(const Board& other, const FilePath& filepath, const QString& name) 
         qDeleteAll(mNetSegments);       mNetSegments.clear();
         qDeleteAll(mDeviceInstances);   mDeviceInstances.clear();
         mUserSettings.reset();
+        mFabricationOutputSettings.reset();
         mDesignRules.reset();
         mGridProperties.reset();
         mLayerStack.reset();
@@ -173,6 +179,9 @@ Board::Board(Project& project, const FilePath& filepath, bool restore,
             // load default design rules
             mDesignRules.reset(new BoardDesignRules());
 
+            // load default fabrication output settings
+            mFabricationOutputSettings.reset(new BoardFabricationOutputSettings(*this));
+
             // load default user settings
             mUserSettings.reset(new BoardUserSettings(*this, restore, readOnly, create));
 
@@ -204,6 +213,14 @@ Board::Board(Project& project, const FilePath& filepath, bool restore,
 
             // load design rules
             mDesignRules.reset(new BoardDesignRules(root.getChildByPath("design_rules")));
+
+            // load fabrication output settings
+            if (const SExpression* child = root.tryGetChildByPath("fabrication_output_settings")) {
+                mFabricationOutputSettings.reset(new BoardFabricationOutputSettings(*this, *child));
+            } else {
+                // backward compatibility - remove this some time!
+                mFabricationOutputSettings.reset(new BoardFabricationOutputSettings(*this));
+            }
 
             // load user settings
             mUserSettings.reset(new BoardUserSettings(*this, restore, readOnly, create));
@@ -264,6 +281,7 @@ Board::Board(Project& project, const FilePath& filepath, bool restore,
         qDeleteAll(mNetSegments);       mNetSegments.clear();
         qDeleteAll(mDeviceInstances);   mDeviceInstances.clear();
         mUserSettings.reset();
+        mFabricationOutputSettings.reset();
         mDesignRules.reset();
         mGridProperties.reset();
         mLayerStack.reset();
@@ -286,6 +304,7 @@ Board::~Board() noexcept
     qDeleteAll(mDeviceInstances);   mDeviceInstances.clear();
 
     mUserSettings.reset();
+    mFabricationOutputSettings.reset();
     mDesignRules.reset();
     mGridProperties.reset();
     mLayerStack.reset();
@@ -744,6 +763,7 @@ void Board::serialize(SExpression& root) const
     root.appendChild(mGridProperties->serializeToDomElement("grid"), true);
     root.appendChild(mLayerStack->serializeToDomElement("layers"), true);
     root.appendChild(mDesignRules->serializeToDomElement("design_rules"), true);
+    root.appendChild(mFabricationOutputSettings->serializeToDomElement("fabrication_output_settings"), true);
     root.appendLineBreak();
     serializePointerContainer(root, mDeviceInstances, "device");
     root.appendLineBreak();

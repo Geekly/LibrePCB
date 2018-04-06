@@ -77,8 +77,7 @@ void FabricationOutputDialog::on_btnGenerate_clicked()
         // rebuild planes because they may be outdated!
         mBoard.rebuildAllPlanes();
 
-        FilePath filepath(mUi->edtOutputDirPath->text());
-        BoardGerberExport grbExport(mBoard, filepath);
+        BoardGerberExport grbExport(mBoard);
         grbExport.exportAllLayers();
     }
     catch (Exception& e)
