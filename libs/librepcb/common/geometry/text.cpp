@@ -73,6 +73,9 @@ Text::Text(const SExpression& node)
     // text alignment
     mAlign = Alignment(node.getChildByPath("align"));
 
+    // backward compatibility - remove this some time!
+    mText.replace('#', '$');
+
     if (!checkAttributesValidity()) throw LogicError(__FILE__, __LINE__);
 }
 

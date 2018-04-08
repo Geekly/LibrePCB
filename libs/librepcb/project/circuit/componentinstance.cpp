@@ -84,6 +84,9 @@ ComponentInstance::ComponentInstance(Circuit& circuit, const SExpression& node) 
             .arg(mUuid.toStr()).arg(mLibComponent->getUuid().toStr()));
     }
 
+    // backward compatibility - remove this some time!
+    mValue.replace('#', '$');
+
     init();
 }
 

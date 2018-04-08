@@ -109,7 +109,7 @@ std::unique_ptr<library::Symbol> SymbolConverter::generate() const
 
     foreach (const parseagle::Text& text, mSymbol.getTexts()) {
         QString layerName = convertSchematicLayer(text.getLayer());
-        QString textStr = text.getValue().replace('>', '#');
+        QString textStr = text.getValue().replace('>', '$');
         Length height = Length::fromMm(text.getSize()) * 2;
         if (textStr == "#NAME") {
             height = Length::fromMm(3.175);

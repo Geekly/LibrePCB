@@ -113,7 +113,7 @@ std::unique_ptr<library::Package> PackageConverter::generate() const
 
     foreach (const parseagle::Text& text, mPackage.getTexts()) {
         QString layerName = convertBoardLayer(text.getLayer());
-        QString textStr = text.getValue().replace('>', '#');
+        QString textStr = text.getValue().replace('>', '$');
         Length height = Length::fromMm(text.getSize()) * 2;
         if (textStr == "#NAME") {
             height = Length::fromMm(3.175);
